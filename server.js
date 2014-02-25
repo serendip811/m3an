@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 var express = require('express'),
+    http = require('http'),
     fs = require('fs'),
     passport = require('passport'),
     logger = require('mean-logger');
@@ -72,8 +73,15 @@ walk(routes_path);
 
 // Start the app by listening on <port>
 var port = process.env.PORT || config.port;
-app.listen(port);
+var server = http.createServer(app);
+var io = require('socket.io').listen(server);
+server.listen(port);
 console.log('Express app started on port ' + port);
+
+io.enable('browser client etag');
+
+var socket = require('./app/routes/socket.js');
+io.sockets.on('connection', socket);
 
 // Initializing logger
 logger.init(app, passport, mongoose);

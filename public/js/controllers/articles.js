@@ -55,6 +55,7 @@ angular.module('mean.articles').controller('ArticlesController', ['$scope', '$ro
             articleId: $routeParams.articleId
         }, function(article) {
             $scope.article = article;
+            $scope.test = 'test';
         });
     };
 }]);
