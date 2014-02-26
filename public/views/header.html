@@ -1,20 +1,37 @@
-<div class="" data-ng-controller="HeaderController">
+<div class="" data-ng-controller="HeaderController" resize>
     <ul class="navbar-nav nav">
         <li>
             <a class="navbar-brand" href="/">Serendip</a>
         </li>
-        <li data-ng-repeat="item in menu" data-ng-show="global.user" ui-route="/{{item.link}}" ng-class="{active: $uiRoute}">
+
+        <li class="dropdown" ng-if="size == 'small'">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Menu <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li data-ng-repeat="item in menu" data-ng-show="global.user" ui-route="/{{item.link}}" ng-class="{active: $uiRoute}">
+                    <a href="#!/{{item.link}}">{{item.title}}</a>
+                </li>
+
+                <li data-ng-hide="global.authenticated"><a href="signup">Signup</a></li>
+                <li data-ng-hide="global.authenticated"><a href="signin">Signin</a></li>
+                <li data-ng-show="global.authenticated" class="divider"></li>
+                <li data-ng-show="global.authenticated"><a href="/signout">Signout</a></li>
+            </ul>
+        </li>
+
+        <li ng-if="size == 'default'" data-ng-repeat="item in menu" data-ng-show="global.user" ui-route="/{{item.link}}" ng-class="{active: $uiRoute}">
             <a href="#!/{{item.link}}">{{item.title}}</a>
         </li>
     </ul>
-    <ul class="navbar-nav nav pull-right" data-ng-hide="global.authenticated">
+
+    <ul class="navbar-nav nav pull-right" data-ng-hide="global.authenticated" ng-if="size == 'default'">
         <li><a href="signup">Signup</a>
         </li>
         <li class="divider-vertical"></li>
         <li><a href="signin">Signin</a>
         </li>
     </ul>
-    <ul class="navbar-nav nav pull-right" data-ng-show="global.authenticated">
+
+    <ul class="navbar-nav nav pull-right" data-ng-show="global.authenticated" ng-if="size == 'default'">
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
 				{{global.user.name}} <b class="caret"></b>

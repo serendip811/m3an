@@ -19,6 +19,9 @@ angular.module('mean').config(['$routeProvider',
         when('/chat', {
             templateUrl: 'views/chat/chat.html'
         }).
+        when('/chat/:roomId', {
+            templateUrl: 'views/chat/room.html'
+        }).
         when('/games', {
             templateUrl: 'views/games/list.html'
         }).
