@@ -80,8 +80,10 @@ console.log('Express app started on port ' + port);
 
 io.enable('browser client etag');
 
-var socket = require('./app/routes/socket.js');
-io.sockets.on('connection', socket);
+//io.sockets.on('connection', socket);
+io.on('connection', function(socket){
+    require('./app/routes/socket.js')(socket, io);
+});
 
 // Initializing logger
 logger.init(app, passport, mongoose);
