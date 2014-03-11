@@ -8,16 +8,27 @@ angular.module('mean.chat').controller('ChatController', ['$scope', '$routeParam
 
     //enter to lobby
     $scope.enter = function(){
-        console.log('enter : ' + Global.user.username);
         Socket.emit('user:join', {
             name: Global.user.username,
             room: 'lobby'
         });
     };
 
+    $scope.createNewRoom = function(){
+        Socket.emit('user:createNewRoom', {
+            name: Global.user.username,
+            room: this.room_name
+        },function(data){
+            $location.path('chat/' + data.room_id);
+        });
+
+
+        this.title = '';
+        this.content = '';
+    };
+
     //join to room
     $scope.join = function(){
-        console.log('join : ' + Global.user.username);
         Socket.emit('user:join', {
             name: Global.user.username
         });
@@ -32,11 +43,20 @@ angular.module('mean.chat').controller('ChatController', ['$scope', '$routeParam
         $scope.messages.push(data);
     });
 
-    Socket.on('user:enter', function (data) {
+    Socket.on('update:userList', function (data) {
         $scope.users = [];
         for (var i = data.users.length - 1; i >= 0; i--) {
             $scope.users.push({
                 name: data.users[i]
+            });
+        }
+    });
+
+    Socket.on('update:roomList', function (data) {
+        $scope.rooms = [];
+        for (var i = data.rooms.length - 1; i >= 0; i--) {
+            $scope.rooms.push({
+                name: data.rooms[i]
             });
         }
     });
