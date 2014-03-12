@@ -1,42 +1,32 @@
-<section data-ng-controller="ChatController" data-ng-init="enter()">
+<section data-ng-controller="ChatController" data-ng-init="init()" id="chatController">
     <div class="form-group row">
         <div class="col-md-2 col-xs-2">
             <label for="room_list" class="control-label">Room List</label>
         </div>        
         <div class="col-md-6 col-xs-6">
-            <select class="form-control" id="room_list">
-                <option data-ng-repeat="room in rooms" value="{{room.name}}">
+            <select class="form-control" id="room_list" ng-disabled="checkDisableRoomList">
+                <option value="">
+                    -- Select Room --
+                </option>
+                <option data-ng-repeat="room in rooms" value="{{room.id}}">
                     {{room.name}}
                 </option>
             </select>      
         </div>
         <div class="col-md-2 col-xs-2">
-            <button type="submit" class="btn btn-default">Join</button>
-            <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Create New Room</button>
-        </div>
-    </div>
-
-    <div class="form-group row">
-        <div class="col-md-2 col-xs-2">
-            <label for="user_list" class="control-label">User List</label>
-        </div>
-        <div class="col-md-8 col-xs-8">
-            <ul>
-                <li data-ng-repeat="user in users">
-                    {{user.name}}
-                </li>
-            </ul>
+            <button type="submit" class="btn btn-default" ng-disabled="checkDisableRoomList">Join</button>
+            <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#create_room_modal">Create New Room</button>
         </div>
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="create_room_modal" tabindex="-1" role="dialog" aria-labelledby="create_room_modalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form role="form" data-ng-submit="createNewRoom()">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="myModalLabel">Create New Room</h4>
+                        <h4 class="modal-title" id="create_room_modalLabel">Create New Room</h4>
                     </div>
                     <div class="modal-body">
                         <div class="form-group row">
@@ -50,12 +40,15 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Create</button>
+                        <button type="submit" class="btn btn-primary" id="btn_create">Create</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-
-
 </section>
+<script type="text/javascript">
+    $("#create_room_modal #btn_create").click(function(){
+        $("#create_room_modal").modal('hide');
+    });
+</script>

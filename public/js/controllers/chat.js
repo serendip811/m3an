@@ -2,35 +2,99 @@
 
 angular.module('mean.chat').controller('ChatController', ['$scope', '$routeParams', '$location', 'Global', 'Socket', function ($scope, $routeParams, $location, Global, Socket) {
     $scope.global = Global;
+    $scope.socketInfo = '';
     $scope.messages = [];
     $scope.users = [];
-    $scope.romms = [];
+    $scope.rooms = [];
 
-    //enter to lobby
-    $scope.enter = function(){
-        Socket.emit('user:join', {
-            name: Global.user.username,
-            room: 'lobby'
+    $scope.getRoomList = function(){
+        getRoomList();
+    };
+
+    $scope.leaveRoom = function(){
+        Socket.emit('user:leaveRoom', {
+            room: $scope.socketInfo.room
         });
+    };
+
+
+    //init
+    $scope.init = function(){
+        $scope.socketInfo = {
+            user:{
+                name: Global.user.username,
+                id: Global.user._id
+            },
+            room:{
+                name: '',
+                id:''
+            }
+        };
+
+        getRoomList();
     };
 
     $scope.createNewRoom = function(){
-        Socket.emit('user:createNewRoom', {
-            name: Global.user.username,
-            room: this.room_name
+        $scope.socketInfo.room = {
+            name: this.room_name,
+            id: Date.now()
+        };
+        Socket.emit('room:createNewRoom', {
+            room: $scope.socketInfo.room
         },function(data){
-            $location.path('chat/' + data.room_id);
+            $location.path('chat/' + data.room.id);
         });
 
-
-        this.title = '';
-        this.content = '';
+        this.room_name = '';
     };
 
+    $scope.join = function(){
+        // $routeParams.roomId 이런 방이 있는지 검증해야 함?
+        // 아니면 그냥 만들어버리긔?
+        $scope.socketInfo = {
+            user:{
+                name: Global.user.username,
+                id: Global.user._id
+            },
+            room:{
+                name: '',
+                id: $routeParams.roomId
+            }
+        };
+        Socket.emit('user:join', $scope.socketInfo);
+    };
+
+    // Socket listeners
+    // ================
+    Socket.on('room:updateRoomList', function (data) {
+        updateRoomList(data);
+    });
+
+    Socket.on('room:updateUserList', function (data) {
+        console.log(data);
+        $scope.users = data.users;
+    });
+
+    // functions
+    // ================
+    function getRoomList(){
+        Socket.emit('room:getRoomList', null, function(data){
+            updateRoomList(data);
+        });
+    }
+    function updateRoomList(data){
+        $scope.rooms = data.rooms;
+        $scope.checkDisableRoomList = $scope.rooms.length>0 ? false : true;
+    }
+
+
+/*
     //join to room
     $scope.join = function(){
         Socket.emit('user:join', {
-            name: Global.user.username
+            user:{
+                name: Global.user.username
+            }
         });
     };
 
@@ -43,7 +107,7 @@ angular.module('mean.chat').controller('ChatController', ['$scope', '$routeParam
         $scope.messages.push(data);
     });
 
-    Socket.on('update:userList', function (data) {
+    Socket.on('room:updateUserList', function (data) {
         $scope.users = [];
         for (var i = data.users.length - 1; i >= 0; i--) {
             $scope.users.push({
@@ -92,5 +156,5 @@ angular.module('mean.chat').controller('ChatController', ['$scope', '$routeParam
 
         $scope.message = '';
     };
-
+*/
 }]);

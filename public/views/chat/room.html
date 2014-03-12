@@ -1,1 +1,15 @@
-room.html
+<section data-ng-controller="ChatController" data-ng-init="join()">
+
+    <div class="form-group row">
+        <div class="col-md-2 col-xs-2">
+            <label for="user_list" class="control-label">User List</label>
+        </div>
+        <div class="col-md-8 col-xs-8">
+            <ul>
+                <li data-ng-repeat="user in users">
+                    {{user.id}} / {{user.name}}
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
