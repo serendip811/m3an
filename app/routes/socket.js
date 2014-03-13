@@ -23,8 +23,34 @@ module.exports = function (socket, io) {
         });
     });
 
+    socket.on('room:knock', function(data, callback){
+        var result = {
+            result: false,
+            room: {
+                name: '',
+                id: ''
+            }
+        };
+        for (var i = 0; i < roomList.length; i++) {
+            /*jslint eqeq: true*/
+            if(roomList[i].id == data.room.id){
+                result.result = true;
+                result.room = roomList[i];
+                break;
+            }
+        }
+        callback(result);
+        if(!result.result){
+            leaveAllRoom();
+        }
+    });
+
     socket.on('user:leaveRoom', function(data){
         leaveRoom(data.room.id);
+    });
+
+    socket.on('user:leaveAllRoom', function(){
+        leaveAllRoom();
     });
 
     socket.on('user:join', function(data){
@@ -35,13 +61,17 @@ module.exports = function (socket, io) {
 
     // clean up when a user leaves, and broadcast it to other users
     socket.on('disconnect', function () {
+        leaveAllRoom();
+    });
+
+    var leaveAllRoom = function(){
         var rooms = io.sockets.manager.roomClients[socket.id];
         for (var room in rooms) {
             if (room.length > 0) {
                 leaveRoom(room.substr(1));
             }
         }
-    });
+    };
 
     var leaveRoom = function(room_id){
         socket.leave(room_id);

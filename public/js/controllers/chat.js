@@ -30,7 +30,7 @@ angular.module('mean.chat').controller('ChatController', ['$scope', '$routeParam
                 id:''
             }
         };
-
+        Socket.emit('user:leaveAllRoom');
         getRoomList();
     };
 
@@ -47,21 +47,41 @@ angular.module('mean.chat').controller('ChatController', ['$scope', '$routeParam
 
         this.room_name = '';
     };
+    $scope.joinRoom = function(){
+        if(!this.room_id || this.room_id.length < 1){
+            alert('방을 선택해 주세요.');
+            return ;
+        }
+        $scope.socketInfo.room = {
+            name: this.room_name,
+            id: this.room_id
+        };
+        $location.path('chat/' + $scope.socketInfo.room.id);
+    };
 
     $scope.join = function(){
-        // $routeParams.roomId 이런 방이 있는지 검증해야 함?
-        // 아니면 그냥 만들어버리긔?
-        $scope.socketInfo = {
-            user:{
-                name: Global.user.username,
-                id: Global.user._id
-            },
-            room:{
-                name: '',
-                id: $routeParams.roomId
-            }
+        var room = {
+            name: '',
+            id: $routeParams.roomId
         };
-        Socket.emit('user:join', $scope.socketInfo);
+        //방 있는지 검증
+        Socket.emit('room:knock', {
+            room: room
+        }, function(data){
+            if(data.result){
+                $scope.socketInfo = {
+                    user:{
+                        name: Global.user.username,
+                        id: Global.user._id
+                    },
+                    room: data.room
+                };
+                Socket.emit('user:join', $scope.socketInfo);
+            }else{
+                alert('올바르지 않은 접근입니다.');
+                $location.path('chat/');
+            }
+        });
     };
 
     // Socket listeners
@@ -71,7 +91,6 @@ angular.module('mean.chat').controller('ChatController', ['$scope', '$routeParam
     });
 
     Socket.on('room:updateUserList', function (data) {
-        console.log(data);
         $scope.users = data.users;
     });
 
