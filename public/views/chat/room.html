@@ -5,11 +5,19 @@
             <label for="user_list" class="control-label">User List</label>
         </div>
         <div class="col-md-8 col-xs-8">
-            <ul>
-                <li data-ng-repeat="user in users">
-                    {{user.id}} // {{user.name}}
-                </li>
-            </ul>
+            <div class="col-md-1" data-ng-repeat="user in users">
+                {{user.name}}
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-2 col-xs-2">
+            <label for="messages" class="control-label">Messages</label>
+        </div>
+        <div class="col-md-8 col-xs-8">
+            <div data-ng-repeat="message in messages">
+                {{message.user.name}} // {{message.text}}
+            </div>
         </div>
     </div>
 </section>

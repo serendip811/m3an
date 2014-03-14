@@ -35,6 +35,7 @@ angular.module('mean.chat').controller('ChatController', ['$scope', '$routeParam
     };
 
     $scope.createNewRoom = function(){
+        angular.element('#create_room_modal').modal('hide');
         $scope.socketInfo.room = {
             name: this.room_name,
             id: Date.now()
@@ -60,6 +61,7 @@ angular.module('mean.chat').controller('ChatController', ['$scope', '$routeParam
     };
 
     $scope.join = function(){
+        angular.element('.modal-backdrop').remove();
         var room = {
             name: '',
             id: $routeParams.roomId
@@ -94,6 +96,9 @@ angular.module('mean.chat').controller('ChatController', ['$scope', '$routeParam
         $scope.users = data.users;
     });
 
+    Socket.on('message:add', function (data) {
+        $scope.messages.push(data);
+    });
     // functions
     // ================
     function getRoomList(){

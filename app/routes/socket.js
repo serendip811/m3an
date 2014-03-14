@@ -57,6 +57,7 @@ module.exports = function (socket, io) {
         socket.user = data.user;
         socket.join(data.room.id);
         updateUserList(data.room.id);
+        sendSystemMessage(data.room.id, socket.user.name+'님이 입장하셨습니다.');
     });
 
     // clean up when a user leaves, and broadcast it to other users
@@ -87,6 +88,8 @@ module.exports = function (socket, io) {
             roomList = tmp_roomList;
         }
         updateRoomList();
+        updateUserList(room_id);
+        sendSystemMessage(room_id, socket.user.name+'님이 퇴장하셨습니다.');
     };
 
     var updateRoomList = function(){
@@ -105,6 +108,22 @@ module.exports = function (socket, io) {
             users : users
         });
     };
+
+    var sendSystemMessage = function(room_id, text){
+        var sysUser = {
+            id:'',
+            name:'system'
+        };
+        sendMessage(sysUser, room_id, text);
+    };
+
+    var sendMessage = function(user, room_id, text){
+        io.sockets.in(room_id).emit('message:add', {
+            user: user,
+            text: text
+        });
+    };
+
 /*    socket.on('user:join', function (data) {
         joinRoom(data);
     });
