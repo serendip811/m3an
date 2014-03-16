@@ -36,7 +36,7 @@
                                 <label for="room_list" class="control-label">Name</label>
                             </div>        
                             <div class="col-md-8 col-xs-8">
-                                <input id="room_name" name="room_name" data-ng-model="room_name" type="text" class="col-md-10" placeholder="Enter Room Name."/>
+                                <input id="room_name" name="room_name" data-ng-model="room_name" type="text" class="col-md-10" placeholder="Enter Room Name." autofocus=""/>
                             </div>
                         </div>
                     </div>
@@ -50,5 +50,9 @@
     </div>
 </section>
 <script type="text/javascript">
-
+    $(document).ready(function(){
+        $('#create_room_modal').on('shown.bs.modal', function(){
+            $('#room_name').focus();
+        });
+    });
 </script>

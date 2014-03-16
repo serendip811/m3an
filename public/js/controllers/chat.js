@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mean.chat').controller('ChatController', ['$scope', '$routeParams', '$location', 'Global', 'Socket', function ($scope, $routeParams, $location, Global, Socket) {
+angular.module('mean.chat').controller('ChatController', ['$scope','$window', '$routeParams', '$location', 'Global', 'Socket', function ($scope, $window, $routeParams, $location, Global, Socket) {
     $scope.global = Global;
     $scope.socketInfo = '';
     $scope.messages = [];
@@ -32,6 +32,10 @@ angular.module('mean.chat').controller('ChatController', ['$scope', '$routeParam
         };
         Socket.emit('user:leaveAllRoom');
         getRoomList();
+
+        angular.element('#create_room_modal').on('shown', function(){
+            angular.element('#room_name').focus();
+        });
     };
 
     $scope.createNewRoom = function(){
@@ -86,6 +90,17 @@ angular.module('mean.chat').controller('ChatController', ['$scope', '$routeParam
         });
     };
 
+    $scope.sendMeesage = function(){
+        if(this.input_message.trim()){
+            Socket.emit('user:sendMessage',{
+                room: $scope.socketInfo.room,
+                user: $scope.socketInfo.user,
+                message: this.input_message
+            });
+            this.input_message = '';
+        }
+    };
+
     // Socket listeners
     // ================
     Socket.on('room:updateRoomList', function (data) {
@@ -98,6 +113,7 @@ angular.module('mean.chat').controller('ChatController', ['$scope', '$routeParam
 
     Socket.on('message:add', function (data) {
         $scope.messages.push(data);
+        angular.element('#div_messages').animate({scrollTop:angular.element('#div_messages')[0].scrollHeight},'fast');
     });
     // functions
     // ================

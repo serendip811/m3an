@@ -60,10 +60,14 @@ module.exports = function (socket, io) {
         sendSystemMessage(data.room.id, socket.user.name+'님이 입장하셨습니다.');
     });
 
-    // clean up when a user leaves, and broadcast it to other users
+    socket.on('user:sendMessage', function(data){
+        sendMessage(data.user, data.room.id, data.message);
+    });
+
     socket.on('disconnect', function () {
         leaveAllRoom();
     });
+
 
     var leaveAllRoom = function(){
         var rooms = io.sockets.manager.roomClients[socket.id];

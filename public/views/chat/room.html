@@ -1,22 +1,43 @@
-<section data-ng-controller="ChatController" data-ng-init="join()">
-
-    <div class="form-group row">
-        <div class="col-md-2 col-xs-2">
-            <label for="user_list" class="control-label">User List</label>
-        </div>
-        <div class="col-md-8 col-xs-8">
-            <div class="col-md-1" data-ng-repeat="user in users">
-                {{user.name}}
+<section data-ng-controller="ChatController" data-ng-init="join()" resize>
+    <div class="container-fluid">
+        <div class="form-group row">
+            <div class="col-md-2">
+                <label for="user_list" class="control-label">User List</label>
+            </div>
+            <div class="col-md-8" id="user_list">
+                <a href="#{{user.id}}" class="" data-ng-repeat="user in users">
+                    {{user.name}}
+                </a>
             </div>
         </div>
-    </div>
-    <div class="form-group row">
-        <div class="col-md-2 col-xs-2">
-            <label for="messages" class="control-label">Messages</label>
+        <div class="form-group row" id="div_messages" style="max-height:{{innerHeight-300}}px;overflow-y:scroll;">
+            <div class="col-md-2">
+                <label for="messages" class="control-label">Messages</label>
+            </div>
+            <div class="col-md-8" id="mesages">
+                <div data-ng-repeat="message in messages">
+                    <div class="row">
+                        <div class="col-md-2 col-xs-2">
+                            <a href="#{{message.user.id}}">
+                                {{message.user.name}}
+                            </a>
+                        </div>
+                        <div class="col-md-8 col-xs-8">
+                            {{message.text}}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-md-8 col-xs-8">
-            <div data-ng-repeat="message in messages">
-                {{message.user.name}} // {{message.text}}
+        <div class="form-group row">
+            <div class="col-md-2 col-xs-2">
+                <label for="input_message" class="control-label"></label>
+            </div>
+            <div class="col-md-8 col-xs-8" id="input_message">
+                <form role="form" data-ng-submit="sendMeesage()">
+                    <input type="text" placeholder="input message." data-ng-model="input_message"/>
+                    <input type="submit" class="btn btn-primary" value="send"/>
+                </form>
             </div>
         </div>
     </div>
