@@ -2,7 +2,7 @@
 
 //Socket service used for socket REST endpoint
 angular.module('mean.chat').factory('Socket', function($rootScope){
-    var socket = io.connect();
+    var socket = io.connect('/chat');
     return {
         on: function (eventName, callback) {
             socket.on(eventName, function () {

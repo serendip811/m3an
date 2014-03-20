@@ -7,18 +7,28 @@ angular.module('mean.chat').controller('ChatController', ['$scope','$window', '$
     $scope.users = [];
     $scope.rooms = [];
 
-    $scope.getRoomList = function(){
-        getRoomList();
-    };
+    // scope...
+    // ========
 
-    $scope.leaveRoom = function(){
-        Socket.emit('user:leaveRoom', {
-            room: $scope.socketInfo.room
-        });
-    };
+    $scope.$on('$locationChangeStart', function (event, next, current) {
+        // http://localhost:3000/#!/chat/1395210609407
+        // => ["#!", "chat", "1395210609407"]
+        current = current.substr(current.indexOf('#!')).split('/');
+        next = next.substr(next.indexOf('#!')).split('/');
 
+        if(current.length > 0){
+            // current  = http://localhost:3000/#!/chat/1395210609407
+            // next     = http://localhost:3000/#!/chat
+            /*jslint eqeq: true*/
+            if(current[1] == 'chat' && current[2] && !next[2]){
+                Socket.emit('user:leaveRoom', {
+                    room: $scope.socketInfo.room
+                });
+            }
+        }
+    });
 
-    //init
+    // init
     $scope.init = function(){
         $scope.socketInfo = {
             user:{
@@ -30,14 +40,16 @@ angular.module('mean.chat').controller('ChatController', ['$scope','$window', '$
                 id:''
             }
         };
-        Socket.emit('user:leaveAllRoom');
-        getRoomList();
+        Socket.emit('user:joinToLobby', $scope.socketInfo, function(data){
+            updateRoomList(data);
+        });
 
         angular.element('#create_room_modal').on('shown', function(){
             angular.element('#room_name').focus();
         });
     };
 
+    // click "Create New Room" button
     $scope.createNewRoom = function(){
         angular.element('#create_room_modal').modal('hide');
         $scope.socketInfo.room = {
@@ -46,12 +58,14 @@ angular.module('mean.chat').controller('ChatController', ['$scope','$window', '$
         };
         Socket.emit('room:createNewRoom', {
             room: $scope.socketInfo.room
-        },function(data){
+        }, function(data){
             $location.path('chat/' + data.room.id);
         });
 
         this.room_name = '';
     };
+
+    // click "Join" button
     $scope.joinRoom = function(){
         if(!this.room_id || this.room_id.length < 1){
             alert('방을 선택해 주세요.');
@@ -64,6 +78,7 @@ angular.module('mean.chat').controller('ChatController', ['$scope','$window', '$
         $location.path('chat/' + $scope.socketInfo.room.id);
     };
 
+    // room.html init
     $scope.join = function(){
         angular.element('.modal-backdrop').remove();
         var room = {
@@ -90,6 +105,7 @@ angular.module('mean.chat').controller('ChatController', ['$scope','$window', '$
         });
     };
 
+    // send message
     $scope.sendMeesage = function(){
         if(this.input_message.trim()){
             Socket.emit('user:sendMessage',{
@@ -103,98 +119,29 @@ angular.module('mean.chat').controller('ChatController', ['$scope','$window', '$
 
     // Socket listeners
     // ================
+
+    //update room list
     Socket.on('room:updateRoomList', function (data) {
         updateRoomList(data);
     });
 
+    //update user list
     Socket.on('room:updateUserList', function (data) {
         $scope.users = data.users;
     });
 
+    //add mesage
     Socket.on('message:add', function (data) {
         $scope.messages.push(data);
         angular.element('#div_messages').animate({scrollTop:angular.element('#div_messages')[0].scrollHeight},'fast');
     });
+
     // functions
-    // ================
-    function getRoomList(){
-        Socket.emit('room:getRoomList', null, function(data){
-            updateRoomList(data);
-        });
-    }
+    // =========
+    
+    // set room list
     function updateRoomList(data){
         $scope.rooms = data.rooms;
         $scope.checkDisableRoomList = $scope.rooms.length>0 ? false : true;
     }
-
-
-/*
-    //join to room
-    $scope.join = function(){
-        Socket.emit('user:join', {
-            user:{
-                name: Global.user.username
-            }
-        });
-    };
-
-
-    // Socket listeners
-    // ================
-    Socket.on('send:message', function (data) {
-        console.log('send:message');
-        console.log(data);
-        $scope.messages.push(data);
-    });
-
-    Socket.on('room:updateUserList', function (data) {
-        $scope.users = [];
-        for (var i = data.users.length - 1; i >= 0; i--) {
-            $scope.users.push({
-                name: data.users[i]
-            });
-        }
-    });
-
-    Socket.on('update:roomList', function (data) {
-        $scope.rooms = [];
-        for (var i = data.rooms.length - 1; i >= 0; i--) {
-            $scope.rooms.push({
-                name: data.rooms[i]
-            });
-        }
-    });
-
-    Socket.on('user:join', function (data) {
-        $scope.users.push({
-            name: data.name
-        });
-        $scope.messages.push({
-            user: 'chatroom',
-            text: 'User ' + data.name + ' has joined.'
-        });
-    });
-
-    // add a message to the conversation when a user disconnects or leaves the room
-    Socket.on('user:left', function (data) {
-        $scope.messages.push({
-            user: 'chatroom',
-            text: 'User ' + data.name + ' has left.'
-        });
-    });
-
-
-    $scope.sendMessage = function(){
-        Socket.emit('send:message', {
-            message: $scope.message
-        });
-
-        $scope.messages.push({
-            user: Global.user.username,
-            text: $scope.message
-        });
-
-        $scope.message = '';
-    };
-*/
 }]);
