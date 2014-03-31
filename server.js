@@ -80,9 +80,13 @@ console.log('Express app started on port ' + port);
 
 io.enable('browser client etag');
 
-//io.sockets.on('connection', socket);
+// chat
 io.of('/chat').on('connection', function(socket){
     require('./app/routes/chat.js')(socket, io, '/chat');
+});
+// game/worms
+io.of('/game/worms').on('connection', function(socket){
+    require('./app/routes/game/worms.js')(socket, '/game/worms');
 });
 
 // Initializing logger

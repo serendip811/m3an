@@ -1,8 +1,8 @@
 'use strict';
 
 //Socket service used for socket REST endpoint
-angular.module('mean.chat').factory('Socket', function($rootScope){
-    var socket = io.connect('/chat');
+angular.module('mean.game.worms').factory('Worms', function($rootScope){
+    var socket = io.connect('/game/worms');
     return {
         on: function (eventName, callback) {
             socket.on(eventName, function () {

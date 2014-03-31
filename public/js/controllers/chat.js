@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mean.chat').controller('ChatController', ['$scope','$window', '$routeParams', '$location', 'Global', 'Socket', function ($scope, $window, $routeParams, $location, Global, Socket) {
+angular.module('mean.chat').controller('ChatController', ['$scope','$window', '$routeParams', '$location', 'Global', 'Chat', function ($scope, $window, $routeParams, $location, Global, Chat) {
     $scope.global = Global;
     $scope.socketInfo = '';
     $scope.messages = [];
@@ -21,7 +21,7 @@ angular.module('mean.chat').controller('ChatController', ['$scope','$window', '$
             // next     = http://localhost:3000/#!/chat
             /*jslint eqeq: true*/
             if(current[1] == 'chat' && current[2] && !next[2]){
-                Socket.emit('user:leaveRoom', {
+                Chat.emit('user:leaveRoom', {
                     room: $scope.socketInfo.room
                 });
             }
@@ -40,7 +40,7 @@ angular.module('mean.chat').controller('ChatController', ['$scope','$window', '$
                 id:''
             }
         };
-        Socket.emit('user:joinToLobby', $scope.socketInfo, function(data){
+        Chat.emit('user:joinToLobby', $scope.socketInfo, function(data){
             updateRoomList(data);
         });
 
@@ -56,7 +56,7 @@ angular.module('mean.chat').controller('ChatController', ['$scope','$window', '$
             name: this.room_name,
             id: Date.now()
         };
-        Socket.emit('room:createNewRoom', {
+        Chat.emit('room:createNewRoom', {
             room: $scope.socketInfo.room
         }, function(data){
             $location.path('chat/' + data.room.id);
@@ -86,7 +86,7 @@ angular.module('mean.chat').controller('ChatController', ['$scope','$window', '$
             id: $routeParams.roomId
         };
         //방 있는지 검증
-        Socket.emit('room:knock', {
+        Chat.emit('room:knock', {
             room: room
         }, function(data){
             if(data.result){
@@ -97,7 +97,7 @@ angular.module('mean.chat').controller('ChatController', ['$scope','$window', '$
                     },
                     room: data.room
                 };
-                Socket.emit('user:join', $scope.socketInfo);
+                Chat.emit('user:join', $scope.socketInfo);
             }else{
                 alert('올바르지 않은 접근입니다.');
                 $location.path('chat/');
@@ -108,7 +108,7 @@ angular.module('mean.chat').controller('ChatController', ['$scope','$window', '$
     // send message
     $scope.sendMeesage = function(){
         if(this.input_message.trim()){
-            Socket.emit('user:sendMessage',{
+            Chat.emit('user:sendMessage',{
                 room: $scope.socketInfo.room,
                 user: $scope.socketInfo.user,
                 message: this.input_message
@@ -121,17 +121,17 @@ angular.module('mean.chat').controller('ChatController', ['$scope','$window', '$
     // ================
 
     //update room list
-    Socket.on('room:updateRoomList', function (data) {
+    Chat.on('room:updateRoomList', function (data) {
         updateRoomList(data);
     });
 
     //update user list
-    Socket.on('room:updateUserList', function (data) {
+    Chat.on('room:updateUserList', function (data) {
         $scope.users = data.users;
     });
 
     //add mesage
-    Socket.on('message:add', function (data) {
+    Chat.on('message:add', function (data) {
         $scope.messages.push(data);
         angular.element('#div_messages').animate({scrollTop:angular.element('#div_messages')[0].scrollHeight},'fast');
     });

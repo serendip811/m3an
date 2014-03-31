@@ -1,1 +1,2 @@
-public/js/services/socket.js
+public/js/services/chat.js
+public/js/services/game/worms.js
