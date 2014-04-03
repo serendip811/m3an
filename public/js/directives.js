@@ -92,3 +92,25 @@ angular.module('mean.system').directive('drawing', function () {
         }
     };
 });
+angular.module('mean.system').directive('ngKeydown', function () {
+    return {
+        restrict: 'A',
+        link: function (scope, element) {
+             element.on('keydown', function(e){
+                //40 down
+                //39 right
+                //38 up
+                //37 left
+                if(e.keyCode == 37){
+                    scope.moveLeft();
+                }else if(e.keyCode == 38){
+                    scope.moveUp();
+                }else if(e.keyCode == 39){
+                    scope.moveRight();
+                }else if(e.keyCode == 40){
+                    scope.moveDown();
+                }
+             });
+        }
+    };
+});
