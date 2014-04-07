@@ -69,15 +69,15 @@ angular.module('mean.system').directive('drawing', function () {
                 }
 
             });
-            element.bind('mouseup', function (event) {
+            element.bind('mouseup', function () {
                 // stop drawing
                 drawing = false;
             });
 
             // canvas reset
-            function reset() {
+/*            function reset() {
                 element[0].width = element[0].width;
-            }
+            }*/
 
             function draw(lX, lY, cX, cY) {
                 // line from
@@ -96,21 +96,25 @@ angular.module('mean.system').directive('ngKeydown', function () {
     return {
         restrict: 'A',
         link: function (scope, element) {
-             element.on('keydown', function(e){
-                //40 down
-                //39 right
-                //38 up
-                //37 left
+            element.on('keydown', function(e){
+
+                /*jslint eqeq: true*/
                 if(e.keyCode == 37){
                     scope.moveLeft();
-                }else if(e.keyCode == 38){
+                }
+                /*jslint eqeq: true*/
+                else if(e.keyCode == 38){
                     scope.moveUp();
-                }else if(e.keyCode == 39){
+                }
+                /*jslint eqeq: true*/
+                else if(e.keyCode == 39){
                     scope.moveRight();
-                }else if(e.keyCode == 40){
+                }
+                /*jslint eqeq: true*/
+                else if(e.keyCode == 40){
                     scope.moveDown();
                 }
-             });
+            });
         }
     };
 });
