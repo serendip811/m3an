@@ -1,7 +1,8 @@
+<script type="text/javascript" src="/lib/angular-bootstrap-nav-tree/dist/abn_tree_directive.js"></script>
 <section data-ng-controller="BookmarksController" data-ng-init="find()">
-    <ul>
-        <li data-ng-repeat="bookmark in bookmarks">
-            <h2><a href="{{bookmark.url}}">{{bookmark.name}} / {{bookmark.group.name}}</a></h2>
-        </li>
-    </ul>
+<div style="width:250px;margin-left:100px;background:whitesmoke;border:1px solid lightgray;border-radius:5px;">
+    <span ng-if="doing_async">...loading...</span>
+    <abn-tree tree-data="my_data">
+    </abn-tree>
+</div>
 </section>

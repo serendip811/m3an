@@ -15,6 +15,10 @@ var Bookmark_groupSchema = new Schema({
         type: Schema.ObjectId,
         ref: 'Bookmark_group'
     },
+    depth: {
+        type: Number,
+        default: 0
+    },
     seq: {
         type: Number,
         default: 0
