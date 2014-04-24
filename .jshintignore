@@ -1,2 +1,3 @@
 public/js/services/chat.js
-public/js/services/game/worms.js
+public/js/services/games/worms.js
+public/js/services/bookmarks.js

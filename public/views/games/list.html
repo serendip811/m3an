@@ -1,0 +1,7 @@
+<section data-ng-controller="GamesController" data-ng-init="find()">
+    <ul>
+        <li data-ng-repeat="game in games">
+            <h2><a href="#!/game/{{game.name}}">{{game.name}}</a></h2>
+        </li>
+    </ul>
+</section>

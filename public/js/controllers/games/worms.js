@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('mean.game.worms').controller('GameWormsController', ['$scope','$window', '$routeParams', '$location', 'Global', 'Worms', function ($scope, $window, $routeParams, $location, Global, Worms) {
+angular.module('mean.games.worms').controller('GameWormsController', ['$scope','$window', '$routeParams', '$location', 'Global', 'Worms', function ($scope, $window, $routeParams, $location, Global, Worms) {
 
     var CANVAS_WIDTH = 500;
     var CANVAS_HEIGHT = 320;
@@ -142,11 +142,9 @@ angular.module('mean.game.worms').controller('GameWormsController', ['$scope','$
                     remove_index = i;
                 }
             }
-                console.log(feeds);
 
             if(remove_index > -1){
                 feeds.splice(remove_index, 1);
-                console.log(feeds);
             }
         };
 

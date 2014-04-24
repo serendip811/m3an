@@ -85,8 +85,8 @@ io.of('/chat').on('connection', function(socket){
     require('./app/routes/chat.js')(socket, io, '/chat');
 });
 // game/worms
-io.of('/game/worms').on('connection', function(socket){
-    require('./app/routes/game/worms.js')(socket, '/game/worms');
+io.of('/games/worms').on('connection', function(socket){
+    require('./app/routes/games/worms.js')(socket, '/games/worms');
 });
 
 // Initializing logger

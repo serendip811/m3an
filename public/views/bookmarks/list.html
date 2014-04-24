@@ -1,0 +1,7 @@
+<section data-ng-controller="BookmarksController" data-ng-init="find()">
+    <ul>
+        <li data-ng-repeat="bookmark in bookmarks">
+            <h2><a href="{{bookmark.url}}">{{bookmark.name}} / {{bookmark.group.name}}</a></h2>
+        </li>
+    </ul>
+</section>
