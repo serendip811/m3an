@@ -9,14 +9,25 @@ angular.module('mean.system').directive('myBookmark', function ($compile) {
         template:''+
         '<ul>'+
             '<li data-ng-repeat="mark in marks.children">'+
-            '{{mark.label}}'+
-                '<my-bookmark marks="mark">'+
+                '<span ng-click="fold()">{{mark.label}}</span>'+
+                '<span ng-if="mark.fold == \'unfolded\'">-</span>'+
+                '<span ng-if="mark.fold != \'unfolded\'">+</span>'+
+                '<my-bookmark marks="mark" ng-if="mark.fold == \'unfolded\'">'+
                 '</my-bookmark>'+
             '</li>'+
             '<li data-ng-repeat="link in marks.bookmarks">'+
                 '<a href="{{link.url}}">{{link.label}}</a>'+
             '</li>'+
         '</ul>',
+        controller:function($scope){
+            $scope.fold = function(){
+                if(this.mark.fold === 'unfolded'){
+                    this.mark.fold = 'folded';
+                }else{
+                    this.mark.fold = 'unfolded';
+                }
+            };
+        },
         compile: function(tElement, tAttr, transclude) {
             //We are removing the contents/innerHTML from the element we are going to be applying the 
             //directive to and saving it to adding it below to the $compile call as the template

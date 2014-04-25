@@ -4,6 +4,7 @@ angular.module('mean.bookmarks').controller('BookmarksController', ['$scope', '$
     $scope.global = Global;
 
     $scope.find = function() {
+        $scope.query = 'test';
         Bookmarks.query(function(bookmarks) {
             $scope.bookmarks = bookmarks[0];
         });
