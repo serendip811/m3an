@@ -54,15 +54,18 @@ angular.module('mean.games.worms').controller('GameWormsController', ['$scope','
         context.clearRect(0, 0, canvas.width, canvas.height);
 
         for(var i=0;i<pWorm.coords.length;i++){
+            context.fillStyle='FFFFFF';
             context.fillRect(pWorm.coords[i].x, pWorm.coords[i].y,RECT_SIZE,RECT_SIZE);
         }
 
         for(i=0;i<worms.length;i++){
             for(var j=0;j<worms[i].coords.length;j++){
+                context.fillStyle='FFFFFF';
                 context.fillRect(worms[i].coords[j].x, worms[i].coords[j].y,RECT_SIZE,RECT_SIZE);
             }
         }
         for(i=0;i<feeds.length;i++){
+            context.fillStyle='AAFFAA';
             context.fillRect(feeds[i].coord.x, feeds[i].coord.y,RECT_SIZE,RECT_SIZE);
         }
     };
@@ -127,6 +130,7 @@ angular.module('mean.games.worms').controller('GameWormsController', ['$scope','
 
             for(i=0;i<worms.length;i++){
                 for(var j=0;j<worms[i].coords.length;j++){
+                    context.fillStyle='FFFFFF';
                     context.fillRect(worms[i].coords[j].x, worms[i].coords[j].y,RECT_SIZE,RECT_SIZE);
                     /*jslint eqeq: true*/
                     if(worms[i].coords[j].x == this.coords[0].x && worms[i].coords[j].y == this.coords[0].y){
