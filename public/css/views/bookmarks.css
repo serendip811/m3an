@@ -1,0 +1,9 @@
+.bookmarks li {
+    color: #fff;
+}
+.bookmarks a {
+    color: #aaf;
+}
+.bookmarks a:hover, .bookmarks a:focus {
+    color: #77f;
+}

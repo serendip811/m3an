@@ -1,7 +1,11 @@
-h1 {
-    text-align:center
+.articles {
+    color:#fff;
 }
 
-ul.articles li:not(:last-child) {
+.articles a{
+    color: #aaf;
+}
+
+.articles ul.articles li:not(:last-child) {
     border-bottom:1px solid #ccc
 }
