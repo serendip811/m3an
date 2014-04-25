@@ -1,4 +1,48 @@
 'use strict';
+angular.module('mean.system').directive('myBookmark', function ($compile) {
+    return {
+        restrict: 'E',
+        scope:{
+            marks:'='
+        },
+        transclude:true,
+        template:''+
+        '<ul>'+
+            '<li data-ng-repeat="mark in marks.children">'+
+            '{{mark.label}}'+
+                '<my-bookmark marks="mark">'+
+                '</my-bookmark>'+
+            '</li>'+
+            '<li data-ng-repeat="link in marks.bookmarks">'+
+                '<a href="{{link.url}}">{{link.label}}</a>'+
+            '</li>'+
+        '</ul>',
+        compile: function(tElement, tAttr, transclude) {
+            //We are removing the contents/innerHTML from the element we are going to be applying the 
+            //directive to and saving it to adding it below to the $compile call as the template
+            var contents = tElement.contents().remove();
+            var compiledContents;
+            return function(scope, iElement) {
+
+                if(!compiledContents) {
+                    //Get the link function with the contents frome top level template with 
+                    //the transclude
+                    compiledContents = $compile(contents, transclude);
+                }
+                //Call the link function to link the given scope and
+                //a Clone Attach Function, http://docs.angularjs.org/api/ng.$compile :
+                // "Calling the linking function returns the element of the template. 
+                //    It is either the original element passed in, 
+                //    or the clone of the element if the cloneAttachFn is provided."
+                compiledContents(scope, function(clone) {
+                    //Appending the cloned template to the instance element, "iElement", 
+                    //on which the directive is to used.
+                    iElement.append(clone);
+                });
+            };
+        }
+    };
+});
 
 angular.module('mean.system').directive('resize', function ($window) {
     return function (scope) {

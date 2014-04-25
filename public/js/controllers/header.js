@@ -5,19 +5,24 @@ angular.module('mean.system').controller('HeaderController', ['$scope', 'Global'
 
     $scope.menu = [{
         'title': 'Games',
-        'link': 'games'
+        'link': 'games',
+        'auth': false
     }, {
         'title': 'Chat',
-        'link': 'chat'
+        'link': 'chat',
+        'auth': true
     }, {
         'title': 'Bookmarks',
-        'link': 'bookmarks'
+        'link': 'bookmarks',
+        'auth': false
     }, {
         'title': 'Articles',
-        'link': 'articles'
+        'link': 'articles',
+        'auth': false
     }, {
         'title': 'Create New Article',
-        'link': 'articles/create'
+        'link': 'articles/create',
+        'auth': true
     }];
     
     $scope.isCollapsed = false;

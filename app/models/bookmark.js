@@ -11,7 +11,10 @@ var mongoose = require('mongoose'),
  * Article Schema
  */
 var BookmarkSchema = new Schema({
-    data: {
+    children: {
+        type: Array
+    },
+    bookmarks: {
         type: Array
     }
 });

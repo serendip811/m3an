@@ -18,8 +18,9 @@
             </ul>
         </li>
 
-        <li ng-if="size == 'default'" data-ng-repeat="item in menu" data-ng-show="global.user" ui-route="/{{item.link}}" ng-class="{active: $uiRoute}">
-            <a href="#!/{{item.link}}">{{item.title}}</a>
+        <li ng-if="size == 'default'" data-ng-repeat="item in menu" ui-route="/{{item.link}}" ng-class="{active: $uiRoute}">
+            <a href="/#!/{{item.link}}" data-ng-if="global.user || !item.auth">{{item.title}}</a>
+            <a href="signin" data-ng-if="!global.user && item.auth">{{item.title}}</a>
         </li>
     </ul>
 
