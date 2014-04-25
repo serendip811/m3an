@@ -7,8 +7,9 @@
         <li class="dropdown" ng-if="size == 'small'">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Menu <b class="caret"></b></a>
             <ul class="dropdown-menu">
-                <li data-ng-repeat="item in menu" data-ng-show="global.user" ui-route="/{{item.link}}" ng-class="{active: $uiRoute}">
-                    <a href="#!/{{item.link}}">{{item.title}}</a>
+                <li data-ng-repeat="item in menu" ui-route="/{{item.link}}" ng-class="{active: $uiRoute}">
+                    <a href="/#!/{{item.link}}" data-ng-if="global.user || !item.auth">{{item.title}}</a>
+                    <a href="signin" data-ng-if="!global.user && item.auth">{{item.title}}</a>
                 </li>
 
                 <li data-ng-hide="global.authenticated"><a href="signup">Signup</a></li>
