@@ -16,7 +16,7 @@ var GameSchema = new Schema({
         default: '',
         trim: true
     },
-    name: {
+    value: {
         type: String,
         default: '',
         trim: true
@@ -45,8 +45,8 @@ var GameSchema = new Schema({
 GameSchema.path('title').validate(function(title) {
     return title.length;
 }, 'Title cannot be blank');
-GameSchema.path('name').validate(function(name) {
-    return name.length;
+GameSchema.path('value').validate(function(value) {
+    return value.length;
 }, 'Name cannot be blank');
 /**
  * Statics

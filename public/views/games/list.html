@@ -2,8 +2,8 @@
     <ul>
         <li data-ng-repeat="game in games">
             <h2>
-                <a ng-if="!{{game.isLinked}}" href="#!/game/{{game.name}}">{{game.name}}</a>
-                <a ng-if="{{game.isLinked}}" href="#!/game/{{game.name}}">{{game.name}}</a>
+                <a ng-if="!game.isLink   " href="#!/game/{{game.value}}">{{game.title}}</a>
+                <a ng-if="game.isLink" href="{{game.value}}" target="_blank">{{game.title}}</a>
             </h2>
         </li>
     </ul>
