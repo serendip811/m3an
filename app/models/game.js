@@ -25,6 +25,10 @@ var GameSchema = new Schema({
         type: Boolean,
         default: true
     },
+    isLink: {
+        type: Boolean,
+        default: false
+    },
     minPlayer: {
         type: Number,
         default: 0
