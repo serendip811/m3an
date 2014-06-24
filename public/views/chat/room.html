@@ -1,4 +1,4 @@
-<section data-ng-controller="ChatController" data-ng-init="join()" resize>
+<section data-ng-controller="ChatController" data-ng-init="join()" resize class="chat-room">
     <div class="container-fluid">
         <div class="form-group row">
             <div class="col-md-2">
@@ -22,7 +22,7 @@
                                 {{message.user.name}}
                             </a>
                         </div>
-                        <div class="col-md-8 col-xs-8">
+                        <div class="col-md-8 col-xs-8 message">
                             {{message.text}}
                         </div>
                     </div>
